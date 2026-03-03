@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thôi Nôi Minh Anh — 11.03.2026</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,400&family=Be+Vietnam+Pro:wght@100;300;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --cinereous: #922724; /* Đỏ sơn mài trầm */
+        --parchment: #f4f1e8; /* Màu giấy dó */
+        --clay: #4a4a4a;
+        --gold-leaf: #b19470;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      body {
+        background-color: var(--parchment);
+        color: var(--clay);
+        font-family: "Be Vietnam Pro", sans-serif;
+        line-height: 1.7;
+        overflow-x: hidden;
+      }
+
+      /* Hiệu ứng hạt giấy thủ công - tinh tế hơn AI tạo */
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.03;
+        pointer-events: none;
+        z-index: 9999;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      }
+
+      .container {
+        width: 100%;
+        max-width: 480px;
+        margin: 0 auto;
+        padding: 40px 25px;
+      }
+
+      /* --- Header: Cấu trúc báo chí cao cấp --- */
+      header {
+        border-bottom: 0.5px solid var(--gold-leaf);
+        padding-bottom: 30px;
+        margin-bottom: 50px;
+      }
+
+      .date-top {
+        font-size: 11px;
+        letter-spacing: 5px;
+        text-transform: uppercase;
+        color: var(--gold-leaf);
+        font-weight: 300;
+      }
+
+      h1 {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 52px;
+        font-weight: 300;
+        line-height: 0.9;
+        margin: 20px 0;
+        color: var(--cinereous);
+      }
+
+      .baby-identity {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+      .full-name {
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+      .nickname {
+        font-family: "Cormorant Garamond", serif;
+        font-style: italic;
+        font-size: 24px;
+        color: var(--gold-leaf);
+      }
+
+      /* --- Hero Image: Bố cục lệch tầng (The Human Touch) --- */
+      .hero {
+        position: relative;
+        margin-bottom: 80px;
+      }
+      .hero-frame {
+        width: 90%;
+        height: 450px;
+        background: #e5e2d9;
+        padding: 15px;
+        border-radius: 2px;
+        position: relative;
+        z-index: 1;
+      }
+      .hero-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: sepia(15%) contrast(105%);
+      }
+
+      .hero-overlay-text {
+        position: absolute;
+        bottom: -30px;
+        right: -10px;
+        z-index: 2;
+        background: var(--cinereous);
+        color: white;
+        padding: 30px;
+        font-family: "Cormorant Garamond", serif;
+        transform: rotate(-2deg);
+        box-shadow: 15px 15px 40px rgba(0, 0, 0, 0.1);
+      }
+
+      /* --- Content Sections: Không dùng Icon --- */
+      .section-label {
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        color: var(--gold-leaf);
+        margin-bottom: 15px;
+        display: block;
+      }
+
+      .content-block {
+        margin-bottom: 60px;
+      }
+      .content-block p {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 21px;
+        line-height: 1.5;
+        color: #333;
+      }
+
+      .details-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 40px;
+        border-top: 0.5px solid #ddd;
+        padding-top: 30px;
+      }
+      .detail-item h3 {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 10px;
+        color: var(--gold-leaf);
+      }
+      .detail-item p {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--cinereous);
+      }
+
+      /* --- Album: Grid tự do --- */
+      .gallery {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 10px;
+        margin: 60px 0;
+      }
+      .photo {
+        background: white;
+        padding: 5px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+      }
+      .p-1 {
+        grid-column: span 6;
+        height: 300px;
+      }
+      .p-2 {
+        grid-column: span 3;
+        height: 180px;
+        margin-top: 10px;
+      }
+      .p-3 {
+        grid-column: span 3;
+        height: 180px;
+        margin-top: -20px;
+      }
+
+      /* --- Form: Tối giản tối đa --- */
+      .rsvp {
+        margin-top: 80px;
+      }
+      .guest-greeting {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 38px;
+        color: var(--cinereous);
+        margin-bottom: 40px;
+      }
+
+      .field {
+        margin-bottom: 35px;
+        position: relative;
+      }
+      .field label {
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: var(--gold-leaf);
+        position: absolute;
+        top: -15px;
+      }
+      .input-text {
+        width: 100%;
+        border: none;
+        border-bottom: 0.5px solid #ccc;
+        background: transparent;
+        padding: 10px 0;
+        font-family: inherit;
+        font-size: 17px;
+        outline: none;
+        transition: 0.3s;
+      }
+      .input-text:focus {
+        border-bottom-color: var(--cinereous);
+      }
+
+      .btn-luxury {
+        width: 100%;
+        padding: 25px;
+        background: var(--cinereous);
+        color: white;
+        border: none;
+        font-family: "Cormorant Garamond", serif;
+        font-size: 16px;
+        text-transform: uppercase;
+        letter-spacing: 5px;
+        cursor: pointer;
+        transition: 0.4s;
+      }
+      .btn-luxury:hover {
+        background: #000;
+        letter-spacing: 7px;
+      }
+
+      footer {
+        text-align: center;
+        padding: 100px 0 40px;
+        font-size: 9px;
+        letter-spacing: 4px;
+        opacity: 0.5;
+        text-transform: uppercase;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <span class="date-top">Mười một tháng ba, Hai ngàn hai sáu</span>
+        <h1>Kỷ niệm Thôi Nôi</h1>
+        <div class="baby-identity">
+          <span class="full-name">Đỗ Trần Minh Anh</span>
+          <span class="nickname">Bé Bắp</span>
+        </div>
+      </header>
+
+      <section class="hero">
+        <div class="hero-frame">
+          <img
+            src="https://via.placeholder.com/600x800?text=Be+Bap+Portrait"
+            class="hero-img"
+            alt="Minh Anh"
+          />
+        </div>
+        <div class="hero-overlay-text">Mừng con<br />Tròn một tuổi</div>
+      </section>
+
+      <div class="content-block">
+        <span class="section-label">Gửi đến bạn quý</span>
+        <p>
+          Hành trình một năm đầu đời của bé Bắp là những chuỗi ngày rực rỡ và ấm
+          áp. Gia đình thân mời bạn đến dự bữa cơm thân mật tại tư gia.
+        </p>
+      </div>
+
+      <div class="details-grid">
+        <div class="detail-item">
+          <h3>Thời gian</h3>
+          <p>11:30 Trưa — 11.03.2026</p>
+        </div>
+        <div class="detail-item">
+          <h3>Địa điểm</h3>
+          <p>55 Khúc Hạo</p>
+          <span style="font-size: 14px; font-style: italic"
+            >An Hải, Sơn Trà, Đà Nẵng</span
+          >
+        </div>
+        <a
+          href="https://maps.app.goo.gl/YourGoogleMapsLink"
+          target="_blank"
+          style="
+            color: var(--cinereous);
+            font-size: 11px;
+            font-weight: 600;
+            text-decoration: none;
+            border-bottom: 0.5px solid;
+          "
+          >BẢN ĐỒ DẪN ĐƯỜNG —></a
+        >
+      </div>
+
+      <div class="gallery">
+        <div class="photo p-1">
+          <img
+            src="https://via.placeholder.com/400x300"
+            style="width: 100%; height: 100%; object-fit: cover"
+            alt="Bắp"
+          />
+        </div>
+        <div class="photo p-2">
+          <img
+            src="https://via.placeholder.com/200x200"
+            style="width: 100%; height: 100%; object-fit: cover"
+            alt="Bắp"
+          />
+        </div>
+        <div class="photo p-3">
+          <img
+            src="https://via.placeholder.com/200x200"
+            style="width: 100%; height: 100%; object-fit: cover"
+            alt="Bắp"
+          />
+        </div>
+      </div>
+
+      <section class="rsvp">
+        <div class="guest-greeting">
+          Thân gửi <span id="guest-name">Gia Đình</span>
+        </div>
+
+        <form id="invite-form">
+          <div class="field">
+            <label>Kính mời</label>
+            <input type="text" id="input-guest" class="input-text" readonly />
+          </div>
+
+          <div class="field">
+            <label>Sự hiện diện</label>
+            <select
+              class="input-text"
+              id="confirm-status"
+              style="border-radius: 0"
+            >
+              <option value="yes">Chắc chắn tham dự</option>
+              <option value="no">Tiếc quá, vắng mặt</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Lời chúc cho con</label>
+            <textarea
+              class="input-text"
+              rows="2"
+              placeholder="Nhắn nhủ gửi đến bé Bắp..."
+            ></textarea>
+          </div>
+
+          <button type="submit" class="btn-luxury">Gửi phản hồi</button>
+        </form>
+      </section>
+
+      <footer>
+        Gia đình Đỗ Trần trân trọng cảm ơn <br />
+        Danang — Viet Nam
+      </footer>
+    </div>
+
+    <script>
+      // Cá nhân hóa URL tinh tế
+      const params = new URLSearchParams(window.location.search);
+      let guest = params.get("name")
+        ? decodeURIComponent(params.get("name")).replace(/\+/g, " ")
+        : "Bạn Quý";
+
+      document.getElementById("guest-name").innerText = guest;
+      document.getElementById("input-guest").value = guest;
+
+      document.getElementById("invite-form").onsubmit = (e) => {
+        e.preventDefault();
+        const status = document.getElementById("confirm-status").value;
+        if (status === "yes") {
+          alert("Cảm ơn " + guest + "! Bé Bắp rất mong gặp bạn tại nhà.");
+        } else {
+          alert("Gia đình đã nhận được thông tin. Chân thành cảm ơn bạn.");
+        }
+      };
+    </script>
+  </body>
+</html>
