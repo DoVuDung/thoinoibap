@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { guestList, generateInvitationLink } from "@/lib/guests";
+import { useState, useEffect } from "react";
+import { generateInvitationLink } from "@/lib/guests";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 interface Invitation {
   id: string;
@@ -10,18 +12,36 @@ interface Invitation {
   invitationUrl: string;
 }
 
-// Generate invitations at module level (static data)
-const allInvitations: Invitation[] = guestList.map((guest) => ({
-  id: guest.id,
-  name: guest.name,
-  relationship: guest.relationship,
-  invitationUrl: generateInvitationLink(guest.name),
-}));
-
 export default function InvitationsPage() {
-  const [invitations] = useState<Invitation[]>(allInvitations);
+  const [invitations, setInvitations] = useState<Invitation[]>([]);
+  const [loading, setLoading] = useState(true);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [filter, setFilter] = useState<string>("all");
+
+  // Load guests from Firebase
+  useEffect(() => {
+    const loadGuests = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "guests"));
+        const loadedInvitations: Invitation[] = querySnapshot.docs.map((doc) => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            name: data.name,
+            relationship: data.relationship,
+            invitationUrl: generateInvitationLink(data.name),
+          };
+        });
+        setInvitations(loadedInvitations);
+      } catch (error) {
+        console.error("Error loading guests:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadGuests();
+  }, []);
 
   const copyToClipboard = async (text: string, id: string) => {
     try {
@@ -80,6 +100,21 @@ export default function InvitationsPage() {
             </span>
           </p>
         </div>
+
+        {/* Loading state */}
+        {loading && (
+          <div className="text-center py-12">
+            <p className="text-clay">Đang tải danh sách...</p>
+          </div>
+        )}
+
+        {/* Empty state */}
+        {!loading && filteredInvitations.length === 0 && (
+          <div className="text-center py-12 bg-white rounded-lg border border-gold-leaf/30">
+            <p className="text-clay text-lg mb-2">Chưa có khách mờii nào</p>
+            <p className="text-gold-leaf text-sm">Hãy thêm khách mờii trong trang Quản lý khách mờii</p>
+          </div>
+        )}
 
         {/* Invitation list */}
         <div className="space-y-4">

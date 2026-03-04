@@ -9,7 +9,7 @@ interface DetailsGridProps {
 
 export default function DetailsGrid({
   timeLabel = "Thời gian",
-  timeValue = "11:30 Trưa — 11.03.2026",
+  timeValue = "17:30 Tối — 15.03.2026",
   locationLabel = "Địa điểm",
   locationValue = "55 Khúc Hạo",
   locationDetail = "An Hải, Sơn Trà, Đà Nẵng",

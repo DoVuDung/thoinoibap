@@ -18,7 +18,10 @@ export default async function Home({
   // Clean up the name: remove quotes and decode URI
   const guestName = rawName
     ? decodeURIComponent(rawName).replace(/"/g, "").replace(/\+/g, " ").trim()
-    : "Gia Đình";
+    : null;
+
+  // Only show RSVP form if coming from an invitation link (has clientname/name in URL)
+  const hasInvitation = !!rawName;
 
   return (
     <div className="container max-w-[480px] mx-auto px-6 py-10">
@@ -27,7 +30,7 @@ export default async function Home({
       <ContentSection />
       <DetailsGrid />
       <Gallery />
-      <RSVPForm guestName={guestName} />
+      {hasInvitation && guestName && <RSVPForm guestName={guestName} />}
       <footer className="text-center py-25 px-0 text-[9px] tracking-[4px] opacity-50 uppercase mt-20">
         <p>Gia đình Đỗ Trần trân trọng cảm ơn</p>
         <p>Danang — Viet Nam</p>

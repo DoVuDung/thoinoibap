@@ -64,7 +64,7 @@ export default function Gallery({ images = [] }: GalleryProps) {
     {
       id: "p-9",
       src: "/images/9.jpeg",
-      alt: "Bắp được mẹ mua cho ghế ô tô",
+      alt: "Bắp làm IT",
     },
     {
       id: "p-10",
@@ -79,7 +79,7 @@ export default function Gallery({ images = [] }: GalleryProps) {
     {
       id: "p-12",
       src: "/images/12.jpeg",
-      alt: "Bé và hoa",
+      alt: "Bắp chơi tết",
     },
     {
       id: "p-13",
@@ -94,7 +94,7 @@ export default function Gallery({ images = [] }: GalleryProps) {
     {
       id: "p-15",
       src: "/images/15.jpeg",
-      alt: "Lần đầu đươc mặc đồ do Chú Bình cô Hằng tặng để chụp hình",
+      alt: "Bắp được mẹ mua ghế ô tô",
     },
     {
       id: "p-16",
@@ -114,7 +114,7 @@ export default function Gallery({ images = [] }: GalleryProps) {
     {
       id: "p-19",
       src: "/images/19.jpeg",
-      alt: "Giấc ngủ bình yên",
+      alt: "Được chụp hình với quần áo mới Chú Bình cô Hằng tặng",
     },
     {
       id: "p-20",

@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 interface RSVPFormProps {
   guestName: string;
@@ -17,25 +19,21 @@ export default function RSVPForm({ guestName }: RSVPFormProps) {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("/api/rsvp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          guestName,
-          status,
-          message,
-        }),
+      // Save RSVP directly to Firebase
+      const docRef = await addDoc(collection(db, "rsvps"), {
+        guestName,
+        status: status === "yes" ? "Attending" : "Not Attending",
+        message: message || "",
+        createdAt: new Date().toISOString(),
       });
 
-      if (response.ok) {
-        setSubmitted(true);
-        if (status === "yes") {
-          alert(`Cảm ơn ${guestName}! Bé Bắp rất mong gặp bạn tại nhà.`);
-        } else {
-          alert("Gia đình đã nhận được thông tin. Chân thành cảm ơn bạn.");
-        }
+      console.log("RSVP saved with ID:", docRef.id);
+      setSubmitted(true);
+      
+      if (status === "yes") {
+        alert(`Cảm ơn ${guestName}! Bé Bắp rất mong gặp bạn tại nhà.`);
       } else {
-        throw new Error("Failed to submit RSVP");
+        alert("Gia đình đã nhận được thông tin. Chân thành cảm ơn bạn.");
       }
     } catch (error) {
       console.error("RSVP submission error:", error);

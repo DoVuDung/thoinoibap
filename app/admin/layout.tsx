@@ -15,6 +15,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   { href: "/admin/guest-manager", label: "Quản lý khách mờii", icon: "" },
   { href: "/admin/invitations", label: "Danh sách thiệp", icon: "" },
+  { href: "/admin/rsvps", label: "Phản hồi RSVP", icon: "" },
   { href: "/", label: "Xem trang chính", icon: "" },
 ];
 
