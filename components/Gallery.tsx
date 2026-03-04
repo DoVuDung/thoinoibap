@@ -13,14 +13,14 @@ export default function Gallery({
   images = [
     {
       id: "p-1",
-      src: "/images/gallery-1.jpg",
+      src: "https://via.placeholder.com/400x300?text=Bap+Photo+1",
       alt: "Bắp",
       span: 6,
       height: 300,
     },
     {
       id: "p-2",
-      src: "/images/gallery-2.jpg",
+      src: "https://via.placeholder.com/200x200?text=Bap+Photo+2",
       alt: "Bắp",
       span: 3,
       height: 180,
@@ -28,7 +28,7 @@ export default function Gallery({
     },
     {
       id: "p-3",
-      src: "/images/gallery-3.jpg",
+      src: "https://via.placeholder.com/200x200?text=Bap+Photo+3",
       alt: "Bắp",
       span: 3,
       height: 180,
