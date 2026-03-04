@@ -37,8 +37,14 @@ export default function GuestManager() {
       setGuests(loadedGuests);
     } catch (error) {
       console.error("Error loading guests:", error);
-      alert("Không thể tải danh sách khách mời. Vui lòng kiểm tra Firebase configuration.");
-    } finally {
+      console.error("Error details:", error);
+      if (error instanceof Error) {
+        console.error("Error message:", error.message);
+        console.error("Error stack:", error.stack);
+        alert(`Không thể tải danh sách khách mờii. Lỗi: ${error.message}`);
+      } else {
+        alert("Không thể tải danh sách khách mờii. Vui lòng kiểm tra Firebase configuration.");
+      }
       setLoading(false);
     }
   };
