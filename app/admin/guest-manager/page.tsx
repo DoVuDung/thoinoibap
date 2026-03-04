@@ -58,6 +58,8 @@ export default function GuestManager() {
     }
 
     try {
+      console.log("Adding guest:", guestName);
+      console.log("Firebase db:", db);
       const invitationUrl = generateInvitationLink(guestName);
       
       const docRef = await addDoc(collection(db, "guests"), {
@@ -82,7 +84,12 @@ export default function GuestManager() {
       alert(`Đã thêm ${guestName} vào danh sách!`);
     } catch (error) {
       console.error("Error adding guest:", error);
-      alert("Không thể thêm khách mời. Vui lòng thử lại.");
+      if (error instanceof Error) {
+        console.error("Error message:", error.message);
+        alert(`Không thể thêm khách mờii. Lỗi: ${error.message}`);
+      } else {
+        alert("Không thể thêm khách mờii. Vui lòng thử lại.");
+      }
     }
   };
 
