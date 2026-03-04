@@ -5,7 +5,7 @@ interface HeroProps {
 
 export default function Hero({
   overlayText = "Mừng con\nTròn một tuổi",
-  imageUrl = "https://via.placeholder.com/600x800?text=Be+Bap+Portrait",
+  imageUrl = "images/12.jpeg",
 }: HeroProps) {
   return (
     <section className="hero relative mb-20">

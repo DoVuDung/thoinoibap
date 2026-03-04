@@ -19,18 +19,36 @@ export const metadata: Metadata = {
   title: "Thôi Nôi Minh Anh — 11.03.2026",
   description: "Mừng bé Bắp tròn một tuổi - March 11, 2026 | 55 Khúc Hạo, Đà Nẵng",
   metadataBase: new URL("https://be-bap.com"),
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "48x48" },
+    ],
+    shortcut: "/favicon.svg",
+    apple: "/apple-touch-icon.png",
+  },
   openGraph: {
     title: "Thôi Nôi Minh Anh — 11.03.2026",
-    description: "Join us for a cozy family dinner at our home.",
+    description: "Mừng bé Bắp tròn một tuổi 🎂 Thân mừ quý vị đến dự tiệc thôi nôi tại gia đình",
     url: "https://be-bap.com",
+    siteName: "Thôi Nôi Minh Anh",
+    locale: "vi_VN",
+    type: "website",
     images: [
       {
-        url: "/og-default.svg",
+        url: "/og-image.svg",
         width: 1200,
         height: 630,
-        alt: "Bắp's 1st Birthday Invitation",
+        alt: "Thôi Nôi Minh Anh - 11.03.2026",
+        type: "image/svg+xml",
       },
     ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Thôi Nôi Minh Anh — 11.03.2026",
+    description: "Mừng bé Bắp tròn một tuổi 🎂 Thân mừ quý vị đến dự tiệc thôi nôi",
+    images: ["/og-image.svg"],
   },
 };
 

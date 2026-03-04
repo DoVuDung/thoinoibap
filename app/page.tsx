@@ -8,11 +8,16 @@ import RSVPForm from "@/components/RSVPForm";
 export default async function Home({
   searchParams,
 }: {
-  searchParams: Promise<{ name?: string }>;
+  searchParams: Promise<{ name?: string; clientname?: string }>;
 }) {
   const resolvedSearchParams = await searchParams;
-  const guestName = resolvedSearchParams.name
-    ? decodeURIComponent(resolvedSearchParams.name).replace(/\+/g, " ")
+  
+  // Support both 'name' and 'clientname' parameters
+  const rawName = resolvedSearchParams.clientname || resolvedSearchParams.name;
+  
+  // Clean up the name: remove quotes and decode URI
+  const guestName = rawName
+    ? decodeURIComponent(rawName).replace(/"/g, "").replace(/\+/g, " ").trim()
     : "Gia Đình";
 
   return (
