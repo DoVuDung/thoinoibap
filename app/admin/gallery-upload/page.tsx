@@ -72,7 +72,11 @@ export default function GalleryUploadPage() {
       formData.append("index", index.toString());
       formData.append("title", title);
 
-      const response = await fetch("/api/gallery/upload", {
+      // Use convert endpoint for DNG files, regular upload for others
+      const isDng = file.name.toLowerCase().endsWith('.dng');
+      const endpoint = isDng ? "/api/gallery/convert" : "/api/gallery/upload";
+
+      const response = await fetch(endpoint, {
         method: "POST",
         body: formData,
       });
@@ -80,7 +84,8 @@ export default function GalleryUploadPage() {
       const result = await response.json();
 
       if (response.ok) {
-        setMessage(`✅ Upload thành công! Ảnh đã được lưu tại: ${result.path}`);
+        const convertMsg = result.converted ? " (DNG đã được chuyển sang JPEG)" : "";
+        setMessage(`✅ Upload thành công${convertMsg}! Ảnh đã được lưu tại: ${result.path}`);
         // Reset form
         setIndex("");
         setTitle("");
@@ -135,6 +140,13 @@ export default function GalleryUploadPage() {
   };
 
   const handleDelete = async (indexToDelete: string) => {
+    console.log('Attempting to delete image with index:', indexToDelete);
+    
+    if (!indexToDelete) {
+      setMessage("❌ Lỗi: Không xác định được số thứ tự ảnh");
+      return;
+    }
+    
     if (!confirm(`Bạn có chắc muốn xóa ảnh số ${indexToDelete}?`)) {
       return;
     }
@@ -146,7 +158,11 @@ export default function GalleryUploadPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ index: indexToDelete }),
       });
+      
+      console.log('Delete response status:', response.status);
       const result = await response.json();
+      console.log('Delete response:', result);
+      
       if (response.ok) {
         setMessage(`✅ Đã xóa ảnh số ${indexToDelete}`);
         // Refresh the list
@@ -156,9 +172,10 @@ export default function GalleryUploadPage() {
           setExistingImages(data.images);
         }
       } else {
-        setMessage(`❌ Lỗi: ${result.error || "Không thể xóa"}`);
+        setMessage(`❌ Lỗi: ${result.error || result.details || "Không thể xóa"}`);
       }
     } catch (error) {
+      console.error('Delete error:', error);
       setMessage("❌ Lỗi kết nối. Vui lòng thử lại.");
     } finally {
       setDeletingIndex(null);
