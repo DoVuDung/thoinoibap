@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import Link from "next/link";
 
 interface RSVPFormProps {
   guestName: string;
@@ -29,12 +30,6 @@ export default function RSVPForm({ guestName }: RSVPFormProps) {
 
       console.log("RSVP saved with ID:", docRef.id);
       setSubmitted(true);
-      
-      if (status === "yes") {
-        alert(`Cảm ơn ${guestName}! Bé Bắp rất mong gặp bạn tại nhà.`);
-      } else {
-        alert("Gia đình đã nhận được thông tin. Chân thành cảm ơn bạn.");
-      }
     } catch (error) {
       console.error("RSVP submission error:", error);
       alert("Rất tiếc, có lỗi xảy ra. Vui lòng thử lại sau.");
@@ -42,6 +37,31 @@ export default function RSVPForm({ guestName }: RSVPFormProps) {
       setIsSubmitting(false);
     }
   };
+
+  // Show success message after submission
+  if (submitted) {
+    return (
+      <section className="rsvp mt-20">
+        <div className="bg-white border-2 border-gold-leaf p-8 rounded-lg shadow-lg text-center">
+          <div className="text-6xl mb-4">{status === "yes" ? "🎉" : "😊"}</div>
+          <h2 className="text-2xl font-serif text-cinereous mb-4">
+            {status === "yes" ? "Cảm ơn bạn đã xác nhận!" : "Cảm ơn bạn đã phản hồi!"}
+          </h2>
+          <p className="text-clay mb-6">
+            {status === "yes" 
+              ? `Bé Bắp rất mong được gặp ${guestName} tại nhà vào ngày 11/03/2026!` 
+              : "Gia đình đã nhận được thông tin. Chân thành cảm ơn bạn."}
+          </p>
+          <Link 
+            href="/"
+            className="inline-block py-4 px-8 bg-cinereous text-white font-serif text-lg uppercase tracking-wider hover:bg-black transition-colors"
+          >
+            Về trang chủ
+          </Link>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="rsvp mt-20">
