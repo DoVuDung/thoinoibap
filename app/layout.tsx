@@ -16,8 +16,8 @@ const beVietnamPro = Be_Vietnam_Pro({
 });
 
 export const metadata: Metadata = {
-  title: "Thôi Nôi Minh Anh — 11.03.2026",
-  description: "Mừng bé Bắp tròn một tuổi - March 11, 2026 | 55 Khúc Hạo, Đà Nẵng",
+  title: "Minh Anh - Bắp | Tròn Một Tuổi 🎈",
+  description: "Mừng bé Bắp tròn một tuổi - 15 tháng 3, 2025 | 55 Khúc Hạo, Đà Nẵng",
   metadataBase: new URL("https://be-bap.com"),
   icons: {
     icon: [
@@ -28,27 +28,27 @@ export const metadata: Metadata = {
     apple: "/apple-touch-icon.png",
   },
   openGraph: {
-    title: "Thôi Nôi Minh Anh — 11.03.2026",
-    description: "Mừng bé Bắp tròn một tuổi 🎂 Thân mừ quý vị đến dự tiệc thôi nôi tại gia đình",
+    title: "Minh Anh - Bắp | Tròn Một Tuổi 🎈",
+    description: "Mừng bé Bắp tròn một tuổi 🎂 Thân mờii quý vị đến dự tiệc thôi nôi",
     url: "https://be-bap.com",
-    siteName: "Thôi Nôi Minh Anh",
+    siteName: "Minh Anh - Bắp Tròn Một Tuổi",
     locale: "vi_VN",
     type: "website",
     images: [
       {
-        url: "/og-image.svg",
+        url: "/images/card.jpg",
         width: 1200,
-        height: 630,
-        alt: "Thôi Nôi Minh Anh - 11.03.2026",
-        type: "image/svg+xml",
+        height: 1600,
+        alt: "Minh Anh - Bắp Tròn Một Tuổi",
+        type: "image/jpeg",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Thôi Nôi Minh Anh — 11.03.2026",
-    description: "Mừng bé Bắp tròn một tuổi 🎂 Thân mừ quý vị đến dự tiệc thôi nôi",
-    images: ["/og-image.svg"],
+    title: "Minh Anh - Bắp | Tròn Một Tuổi 🎈",
+    description: "Mừng bé Bắp tròn một tuổi 🎂 Thân mờii quý vị đến dự tiệc thôi nôi",
+    images: ["/images/card.jpg"],
   },
 };
 

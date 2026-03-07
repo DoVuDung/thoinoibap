@@ -1,19 +1,37 @@
 @import "tailwindcss";
 
 :root {
-  /* Indochine Color Palette - Exact match from source.html */
-  --cinereous: #922724; /* Đỏ sơn mài trầm */
-  --parchment: #f4f1e8; /* Màu giấy dó */
-  --clay: #4a4a4a;
-  --gold-leaf: #b19470;
+  /* Whimsical Card Color Palette - Matching card.jpg */
+  --cream: #FDF6E3;
+  --cream-light: #FFF8E7;
+  --soft-pink: #F8C8DC;
+  --baby-blue: #B8D4E3;
+  --peach: #FFD4BC;
+  --warm-brown: #6B4423;
+  --warm-brown-light: #8B5A3C;
+  --cloud-white: #FFFFFF;
   
-  --background: var(--parchment);
-  --foreground: var(--clay);
+  /* Legacy colors for backward compatibility */
+  --cinereous: #6B4423;
+  --parchment: #FDF6E3;
+  --clay: #6B4423;
+  --gold-leaf: #D4A574;
+  
+  --background: var(--cream);
+  --foreground: var(--warm-brown);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-cream: var(--cream);
+  --color-cream-light: var(--cream-light);
+  --color-soft-pink: var(--soft-pink);
+  --color-baby-blue: var(--baby-blue);
+  --color-peach: var(--peach);
+  --color-warm-brown: var(--warm-brown);
+  --color-warm-brown-light: var(--warm-brown-light);
+  --color-cloud-white: var(--cloud-white);
   --color-cinereous: var(--cinereous);
   --color-parchment: var(--parchment);
   --color-clay: var(--clay);
@@ -22,7 +40,7 @@
   --font-serif: var(--font-cormorant-garamond);
 }
 
-/* Paper grain texture overlay - subtle handmade feel */
+/* Soft gradient background matching card theme */
 body::before {
   content: "";
   position: fixed;
@@ -30,18 +48,84 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  opacity: 0.03;
+  opacity: 0.02;
   pointer-events: none;
   z-index: 9999;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 body {
-  background-color: var(--parchment);
-  color: var(--clay);
+  background: linear-gradient(135deg, var(--cream) 0%, var(--cream-light) 50%, var(--cream) 100%);
+  color: var(--warm-brown);
   font-family: var(--font-be-vietnam-pro), sans-serif;
   line-height: 1.7;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+/* Animation Keyframes */
+@keyframes float-cloud {
+  0%, 100% {
+    transform: translateX(-8px) translateY(0);
+  }
+  50% {
+    transform: translateX(8px) translateY(-4px);
+  }
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float-balloon {
+  0%, 100% {
+    transform: translateY(0) rotate(-2deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(2deg);
+  }
+}
+
+@keyframes card-open {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(-120deg);
+  }
+}
+
+/* Animation Classes */
+.animate-float-cloud {
+  animation: float-cloud 8s ease-in-out infinite;
+}
+
+.animate-twinkle {
+  animation: twinkle 2s ease-in-out infinite;
+}
+
+.animate-float-balloon {
+  animation: float-balloon 3s ease-in-out infinite;
+}
+
+.animate-card-open {
+  animation: card-open 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .animate-float-cloud,
+  .animate-twinkle,
+  .animate-float-balloon {
+    animation: none;
+  }
 }

@@ -1,278 +1,214 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
+import Image from "next/image";
 
 interface GalleryImage {
-  id: string;
   src: string;
   alt: string;
-  span?: number;
-  height?: number;
-  marginTop?: number;
 }
 
-interface GalleryProps {
-  images?: GalleryImage[];
-}
+// Pre-compute images array at module level
+const IMAGES: GalleryImage[] = Array.from({ length: 21 }, (_, i) => ({
+  src: `/images/${i + 1}.jpeg`,
+  alt: `Bé Bắp ${i + 1}`,
+}));
 
-export default function Gallery({ images = [] }: GalleryProps) {
+export default function Gallery() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCarouselOpen, setIsCarouselOpen] = useState(false);
 
-  const defaultImages: GalleryImage[] = [
-    {
-      id: "p-1",
-      src: "/images/1.jpeg",
-      alt: "Ngày sinh bé Bắp",
-    },
-    {
-      id: "p-2",
-      src: "/images/2.jpeg",
-      alt: "Bắp sinh non 2 tháng nên ba mẹ phải thay nhau ấp em trong bệnh viên, lúc này nhẹ cân 1.5 kg",
-    },
-    {
-      id: "p-3",
-      src: "/images/3.jpeg",
-      alt: "Bắp sau một tháng về nhà ngoại, đủ tiêu chuẩn ra viện, chiến binh nhí, cai thở oxy nhanh nhất phòng, khóc to nhất phòng",
-    },
-    {
-      id: "p-4",
-      src: "/images/4.jpeg",
-      alt: "Khoảnh khắc đáng yêu",
-    },
-    {
-      id: "p-5",
-      src: "/images/5.jpeg",
-      alt: "Bé Bắp kháu khỉnh",
-    },
-    {
-      id: "p-6",
-      src: "/images/6.jpeg",
-      alt: "Gia đình nhỏ",
-    },
-    {
-      id: "p-7",
-      src: "/images/7.jpeg",
-      alt: "Lần đầu đi cắt tóc",
-    },
-    {
-      id: "p-8",
-      src: "/images/8.jpeg",
-      alt: "Bé tròn mắt",
-    },
-    {
-      id: "p-9",
-      src: "/images/9.jpeg",
-      alt: "Bắp làm IT",
-    },
-    {
-      id: "p-10",
-      src: "/images/10.jpeg",
-      alt: "Nụ cười thiên thần",
-    },
-    {
-      id: "p-11",
-      src: "/images/11.jpeg",
-      alt: "Đáng yêu quá",
-    },
-    {
-      id: "p-12",
-      src: "/images/12.jpeg",
-      alt: "Bắp chơi tết",
-    },
-    {
-      id: "p-13",
-      src: "/images/13.jpeg",
-      alt: "Bắp lần đầu đươc ba cho ăn",
-    },
-    {
-      id: "p-14",
-      src: "/images/14.jpeg",
-      alt: "Bé Bắp của mẹ",
-    },
-    {
-      id: "p-15",
-      src: "/images/15.jpeg",
-      alt: "Bắp được mẹ mua ghế ô tô",
-    },
-    {
-      id: "p-16",
-      src: "/images/16.jpeg",
-      alt: "Bắp lần đầu đi ăn sinh nhật bà Ngoại",
-    },
-    {
-      id: "p-17",
-      src: "/images/17.jpeg",
-      alt: "Khoảnh khắc ngọt ngào",
-    },
-    {
-      id: "p-18",
-      src: "/images/18.jpeg",
-      alt: "Bé yêu trong vòng tay",
-    },
-    {
-      id: "p-19",
-      src: "/images/19.jpeg",
-      alt: "Được chụp hình với quần áo mới Chú Bình cô Hằng tặng",
-    },
-    {
-      id: "p-20",
-      src: "/images/20.jpeg",
-      alt: "Nụ cười tỏa nắng",
-    },
-    {
-      id: "p-21",
-      src: "/images/21.jpeg",
-      alt: "Thiên thần nhỏ của gia đình",
-    },
-  ];
-
-  const galleryImages = images.length > 0 ? images : defaultImages;
-
-  const nextImage = () => {
-    setCurrentIndex((prev) => (prev + 1) % galleryImages.length);
-  };
-
-  const prevImage = () => {
-    setCurrentIndex((prev) => (prev - 1 + galleryImages.length) % galleryImages.length);
-  };
-
-  const openModal = (index: number) => {
+  const openCarousel = (index: number) => {
     setCurrentIndex(index);
-    setIsModalOpen(true);
+    setIsCarouselOpen(true);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
+  const closeCarousel = () => {
+    setIsCarouselOpen(false);
+  };
+
+  const goToPrevious = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentIndex((prev) => (prev === 0 ? IMAGES.length - 1 : prev - 1));
+  };
+
+  const goToNext = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentIndex((prev) => (prev === IMAGES.length - 1 ? 0 : prev + 1));
+  };
+
+  const goToSlide = (index: number) => {
+    setCurrentIndex(index);
   };
 
   return (
-    <div className="gallery my-15">
-      {/* Thumbnail Grid */}
-      <div className="grid grid-cols-3 md:grid-cols-5 gap-3 mb-8">
-        {galleryImages.map((img, index) => (
+    <section className="gallery mb-16">
+      {/* Section header */}
+      <div className="text-center mb-8">
+        <div className="flex justify-center items-center gap-3 mb-3">
+          <div className="w-8 h-[1px] bg-gradient-to-r from-transparent to-peach" />
+          <svg className="w-5 h-5 text-peach" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <div className="w-8 h-[1px] bg-gradient-to-l from-transparent to-peach" />
+        </div>
+        <h2 className="font-serif text-[22px] text-warm-brown">Khoảnh khắc đáng yêu</h2>
+      </div>
+
+      {/* Featured Image Preview */}
+      <div className="mb-4">
+        <div 
+          className="relative aspect-[4/3] rounded-2xl overflow-hidden cursor-pointer group shadow-lg"
+          onClick={() => openCarousel(currentIndex)}
+        >
+          <Image
+            src={IMAGES[currentIndex].src}
+            alt={IMAGES[currentIndex].alt}
+            fill
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+            sizes="(max-width: 480px) 100vw, 480px"
+            priority
+          />
+          {/* Overlay with counter */}
+          <div className="absolute inset-0 bg-gradient-to-t from-warm-brown/60 via-transparent to-transparent" />
+          <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between">
+            <p className="text-white font-serif text-[18px]">{IMAGES[currentIndex].alt}</p>
+            <span className="text-white/80 text-[14px]">{currentIndex + 1} / {IMAGES.length}</span>
+          </div>
+          {/* Play icon */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      {/* Thumbnail Navigation */}
+      <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+        {IMAGES.map((image: GalleryImage, index: number) => (
           <button
-            key={img.id}
-            onClick={() => openModal(index)}
-            className={`thumbnail cursor-pointer rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105 ${
-              index === currentIndex ? "ring-4 ring-pink-400" : ""
+            key={index}
+            onClick={() => goToSlide(index)}
+            className={`relative flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden transition-all ${
+              index === currentIndex 
+                ? "ring-2 ring-soft-pink ring-offset-2" 
+                : "opacity-60 hover:opacity-100"
             }`}
           >
             <Image
-              src={img.src}
-              alt={img.alt}
-              width={150}
-              height={128}
-              className="w-full h-32 object-cover"
+              src={image.src}
+              alt={image.alt}
+              fill
+              className="object-cover"
+              sizes="64px"
             />
           </button>
         ))}
       </div>
 
-      {/* Main Carousel */}
-      <div className="carousel relative bg-white rounded-2xl shadow-lg overflow-hidden max-w-4xl mx-auto">
-        <div className="relative h-[500px] flex items-center justify-center bg-gray-50">
-          <Image
-            src={galleryImages[currentIndex].src}
-            alt={galleryImages[currentIndex].alt}
-            width={800}
-            height={500}
-            className="max-w-full max-h-full object-contain"
-          />
-          
-          {/* Navigation Arrows */}
-          <button
-            onClick={prevImage}
-            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
-            aria-label="Previous image"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          
-          <button
-            onClick={nextImage}
-            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
-            aria-label="Next image"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-
-          {/* Image Counter */}
-          <div className="absolute top-4 right-4 bg-black/60 text-white px-4 py-2 rounded-full text-sm font-medium">
-            {currentIndex + 1} / {galleryImages.length}
-          </div>
-        </div>
-
-        {/* Image Caption */}
-        <div className="p-6 bg-gradient-to-r from-pink-50 to-purple-50">
-          <p className="text-center text-gray-700 font-medium italic">
-            {galleryImages[currentIndex].alt}
-          </p>
-        </div>
+      {/* View All Button */}
+      <div className="text-center mt-6">
+        <button 
+          onClick={() => openCarousel(0)}
+          className="inline-flex items-center gap-2 px-6 py-3 bg-white rounded-full shadow-md border border-peach/30 text-warm-brown text-[13px] font-medium hover:shadow-lg hover:border-peach/50 transition-all"
+        >
+          <svg className="w-4 h-4 text-peach" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+          </svg>
+          Xem tất cả {IMAGES.length} ảnh
+        </button>
       </div>
 
-      {/* Modal/Lightbox */}
-      {isModalOpen && (
-        <div
-          className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
-          onClick={closeModal}
+      {/* Full Screen Carousel Modal */}
+      {isCarouselOpen && (
+        <div 
+          className="fixed inset-0 z-50 bg-warm-brown/95 flex flex-col"
+          onClick={closeCarousel}
         >
-          <div className="relative flex flex-col items-center justify-center max-w-6xl max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
-            {/* Close Button */}
-            <button
-              onClick={closeModal}
-              className="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors z-10"
-              aria-label="Close modal"
+          {/* Header */}
+          <div className="flex items-center justify-between p-4 text-white">
+            <div className="flex items-center gap-3">
+              <span className="font-serif text-[18px]">{IMAGES[currentIndex].alt}</span>
+              <span className="text-white/60 text-[14px]">{currentIndex + 1} / {IMAGES.length}</span>
+            </div>
+            <button 
+              className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors"
+              onClick={closeCarousel}
             >
-              <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
+          </div>
 
-            {/* Navigation Arrows */}
+          {/* Main Image Area */}
+          <div className="flex-1 flex items-center justify-center relative px-4">
+            {/* Previous Button */}
             <button
-              onClick={prevImage}
-              className="absolute left-[-60px] top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors z-10"
-              aria-label="Previous image"
+              onClick={goToPrevious}
+              className="absolute left-4 z-10 w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-colors"
             >
-              <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
-            
-            <button
-              onClick={nextImage}
-              className="absolute right-[-60px] top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors z-10"
-              aria-label="Next image"
-            >
-              <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
 
-            {/* Full-size Image */}
-            <div className="flex items-center justify-center max-h-[85vh]">
+            {/* Image */}
+            <div 
+              className="relative w-full max-w-lg aspect-[3/4] rounded-2xl overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
               <Image
-                src={galleryImages[currentIndex].src}
-                alt={galleryImages[currentIndex].alt}
-                width={1200}
-                height={800}
-                className="max-w-full max-h-[85vh] object-contain rounded-lg"
+                src={IMAGES[currentIndex].src}
+                alt={IMAGES[currentIndex].alt}
+                fill
+                className="object-contain"
+                sizes="(max-width: 768px) 100vw, 512px"
               />
             </div>
 
-            {/* Caption in Modal */}
-            <p className="text-white text-center mt-6 text-xl font-medium italic">
-              {galleryImages[currentIndex].alt}
-            </p>
+            {/* Next Button */}
+            <button
+              onClick={goToNext}
+              className="absolute right-4 z-10 w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Thumbnail Strip */}
+          <div className="p-4 bg-warm-brown/50">
+            <div className="flex gap-2 overflow-x-auto scrollbar-hide justify-center">
+              {IMAGES.map((image: GalleryImage, index: number) => (
+                <button
+                  key={index}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    goToSlide(index);
+                  }}
+                  className={`relative flex-shrink-0 w-14 h-14 rounded-lg overflow-hidden transition-all ${
+                    index === currentIndex 
+                      ? "ring-2 ring-white" 
+                      : "opacity-50 hover:opacity-80"
+                  }`}
+                >
+                  <Image
+                    src={image.src}
+                    alt={image.alt}
+                    fill
+                    className="object-cover"
+                    sizes="56px"
+                  />
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       )}
-    </div>
+    </section>
   );
 }
