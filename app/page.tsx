@@ -49,7 +49,7 @@ export default function Home() {
         <Gallery />
         {hasInvitation && guestName && <RSVPForm guestName={guestName} />}
         <footer className="text-center py-16 text-[10px] tracking-[3px] opacity-60 uppercase mt-20 text-warm-brown">
-          <p className="mb-2">Gia đình Đỗ Trần trân trọng cảm ơn</p>
+          <p className="mb-2">Gia đình Bắp trân trọng cảm ơn</p>
           <p>Đà Nẵng — Việt Nam</p>
           <div className="mt-4 flex justify-center gap-2">
             <span className="text-soft-pink">★</span>
