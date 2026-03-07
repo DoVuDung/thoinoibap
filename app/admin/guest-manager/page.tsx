@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { collection, addDoc, getDocs, deleteDoc, doc } from "firebase/firestore";
+import { collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
 interface Guest {
@@ -19,35 +19,40 @@ export default function GuestManager() {
   const [loading, setLoading] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [filter, setFilter] = useState("all");
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editName, setEditName] = useState("");
+  const [editRelationship, setEditRelationship] = useState("family");
+
+ 
 
   // Load guests from Firestore on mount
   useEffect(() => {
+    const loadGuests = async () => {
+      try {
+        setLoading(true);
+        const querySnapshot = await getDocs(collection(db, "guests"));
+        const loadedGuests: Guest[] = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+          createdAt: doc.data().createdAt?.toDate() || null,
+        })) as Guest[];
+        setGuests(loadedGuests);
+      } catch (error) {
+        console.error("Error loading guests:", error);
+        console.error("Error details:", error);
+        if (error instanceof Error) {
+          console.error("Error message:", error.message);
+          console.error("Error stack:", error.stack);
+          alert(`Không thể tải danh sách khách mờii. Lỗi: ${error.message}`);
+        } else {
+          alert("Không thể tải danh sách khách mờii. Vui lòng kiểm tra Firebase configuration.");
+        }
+        setLoading(false);
+      }
+    };
+
     loadGuests();
   }, []);
-
-  const loadGuests = async () => {
-    try {
-      setLoading(true);
-      const querySnapshot = await getDocs(collection(db, "guests"));
-      const loadedGuests: Guest[] = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate() || null,
-      })) as Guest[];
-      setGuests(loadedGuests);
-    } catch (error) {
-      console.error("Error loading guests:", error);
-      console.error("Error details:", error);
-      if (error instanceof Error) {
-        console.error("Error message:", error.message);
-        console.error("Error stack:", error.stack);
-        alert(`Không thể tải danh sách khách mờii. Lỗi: ${error.message}`);
-      } else {
-        alert("Không thể tải danh sách khách mờii. Vui lòng kiểm tra Firebase configuration.");
-      }
-      setLoading(false);
-    }
-  };
 
   const generateInvitationLink = (name: string): string => {
     const baseUrl = typeof window !== "undefined" ? window.location.origin : "http://localhost:3000";
@@ -111,6 +116,51 @@ export default function GuestManager() {
     } catch (error) {
       console.error("Error deleting guest:", error);
       alert("Không thể xóa khách mời.");
+    }
+  };
+
+  const startEditing = (guest: Guest) => {
+    setEditingId(guest.id!);
+    setEditName(guest.name);
+    setEditRelationship(guest.relationship);
+  };
+
+  const cancelEditing = () => {
+    setEditingId(null);
+    setEditName("");
+    setEditRelationship("family");
+  };
+
+  const handleUpdateGuest = async (id: string) => {
+    if (!editName.trim()) {
+      alert("Vui lòng nhập tên khách mờii!");
+      return;
+    }
+
+    try {
+      const newInvitationUrl = generateInvitationLink(editName);
+      await updateDoc(doc(db, "guests", id), {
+        name: editName.trim(),
+        relationship: editRelationship,
+        invitationUrl: newInvitationUrl,
+      });
+
+      setGuests(guests.map((g) =>
+        g.id === id
+          ? {
+              ...g,
+              name: editName.trim(),
+              relationship: editRelationship,
+              invitationUrl: newInvitationUrl,
+            }
+          : g
+      ));
+
+      setEditingId(null);
+      alert("Đã cập nhật thông tin khách mờii!");
+    } catch (error) {
+      console.error("Error updating guest:", error);
+      alert("Không thể cập nhật khách mờii.");
     }
   };
 
@@ -246,59 +296,105 @@ export default function GuestManager() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {filteredGuests.map((guest, index) => (
-                  <tr key={guest.id} className="hover:bg-parchment transition-colors">
-                    <td className="px-6 py-4 text-clay font-medium">
-                      {index + 1}
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className="text-lg font-serif text-cinereous">
-                        {guest.name}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className="text-sm uppercase tracking-wider text-gold-leaf">
-                        {guest.relationship === "family"
-                          ? "Gia đình"
-                          : guest.relationship === "friend"
-                          ? "Bạn bè"
-                          : "Đồng nghiệp"}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <input
-                        type="text"
-                        value={guest.invitationUrl}
-                        readOnly
-                        className="w-full px-2 py-1 border border-gray-300 rounded text-xs text-gray-600 bg-gray-50"
-                      />
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex gap-2 justify-center">
-                        <button
-                          onClick={() =>
-                            copyToClipboard(guest.invitationUrl, guest.id!)
-                          }
-                          className={`px-4 py-2 text-xs uppercase tracking-wider transition-all ${
-                            copiedId === guest.id
-                              ? "bg-green-600 text-white"
-                              : "bg-cinereous text-white hover:bg-black"
-                          }`}
-                        >
-                          {copiedId === guest.id ? "Đã chép" : "Sao chép"}
-                        </button>
-                        <button
-                          onClick={() =>
-                            handleDeleteGuest(guest.id!, guest.name)
-                          }
-                          className="px-4 py-2 text-xs uppercase tracking-wider bg-red-600 text-white hover:bg-red-700 transition-colors"
-                        >
-                          Xóa
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                {filteredGuests.map((guest, index) => {
+                  const isEditing = editingId === guest.id;
+                  return (
+                    <tr key={guest.id} className="hover:bg-parchment transition-colors">
+                      <td className="px-6 py-4 text-clay font-medium">
+                        {index + 1}
+                      </td>
+                      <td className="px-6 py-4">
+                        {isEditing ? (
+                          <input
+                            type="text"
+                            value={editName}
+                            onChange={(e) => setEditName(e.target.value)}
+                            className="w-full px-3 py-2 border-2 border-gold-leaf rounded text-lg font-serif text-cinereous"
+                            autoFocus
+                          />
+                        ) : (
+                          <span className="text-lg font-serif text-cinereous">
+                            {guest.name}
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4">
+                        {isEditing ? (
+                          <select
+                            value={editRelationship}
+                            onChange={(e) => setEditRelationship(e.target.value)}
+                            className="w-full px-3 py-2 border-2 border-gold-leaf rounded text-sm uppercase tracking-wider bg-white"
+                          >
+                            <option value="family">Gia đình</option>
+                            <option value="friend">Bạn bè</option>
+                            <option value="colleague">Đồng nghiệp</option>
+                          </select>
+                        ) : (
+                          <span className="text-sm uppercase tracking-wider text-gold-leaf">
+                            {guest.relationship === "family"
+                              ? "Gia đình"
+                              : guest.relationship === "friend"
+                              ? "Bạn bè"
+                              : "Đồng nghiệp"}
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4">
+                        <input
+                          type="text"
+                          value={guest.invitationUrl}
+                          readOnly
+                          className="w-full px-2 py-1 border border-gray-300 rounded text-xs text-gray-600 bg-gray-50"
+                        />
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex gap-2 justify-center">
+                          {isEditing ? (
+                            <>
+                              <button
+                                onClick={() => handleUpdateGuest(guest.id!)}
+                                className="px-4 py-2 text-xs uppercase tracking-wider bg-green-600 text-white hover:bg-green-700 transition-colors"
+                              >
+                                Lưu
+                              </button>
+                              <button
+                                onClick={cancelEditing}
+                                className="px-4 py-2 text-xs uppercase tracking-wider bg-gray-500 text-white hover:bg-gray-600 transition-colors"
+                              >
+                                Hủy
+                              </button>
+                            </>
+                          ) : (
+                            <>
+                              <button
+                                onClick={() => copyToClipboard(guest.invitationUrl, guest.id!)}
+                                className={`px-4 py-2 text-xs uppercase tracking-wider transition-all ${
+                                  copiedId === guest.id
+                                    ? "bg-green-600 text-white"
+                                    : "bg-cinereous text-white hover:bg-black"
+                                }`}
+                              >
+                                {copiedId === guest.id ? "Đã chép" : "Sao chép"}
+                              </button>
+                              <button
+                                onClick={() => startEditing(guest)}
+                                className="px-4 py-2 text-xs uppercase tracking-wider bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+                              >
+                                Sửa
+                              </button>
+                              <button
+                                onClick={() => handleDeleteGuest(guest.id!, guest.name)}
+                                className="px-4 py-2 text-xs uppercase tracking-wider bg-red-600 text-white hover:bg-red-700 transition-colors"
+                              >
+                                Xóa
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
